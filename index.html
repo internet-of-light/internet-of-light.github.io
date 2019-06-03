@@ -1,0 +1,477 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>IOL Testing</title>
+		<link href="simpleGridTemplate.css" rel="stylesheet" type="text/css">
+		<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+  		<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
+		<!--<script data-cfasync="false" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
+		<script>
+			
+			
+							 
+			
+
+			var mqtt
+			var reconnectTimeout = 2000
+			//var host="broker.mqttdashboard.com"
+			var host = "test.mosquitto.org"
+			//var port=8000 //For MQTTDash
+			var port = 8081 //for Mosquitto
+					
+			var topics = ["iol", "iol2"]
+			
+			function onFailure(message) {
+				console.log("Connection Attempt to Host "+host+" failed.");
+				setTimeout(MQTTconnect, reconnectTimeout);
+        	}
+			
+			function onSubFail(message) {
+				console.log("Sub fail: " + message.errorMessage);
+			}
+        
+			function onMessageArrived(msg){
+				var inMessage = msg.payloadString;
+				var inTopic = msg.destinationName;
+				var out_msg="Message received "+msg.payloadString+", Topic: " + msg.destinationName + ", DUP: " + msg.duplicate + ", MSG Retained: " + msg.retained;
+				$('#results').prepend("Message: "+msg.payloadString+ ", Topic: " + msg.destinationName + "&#13;&#10;");
+				console.log(out_msg);
+			}
+		
+	 		function onConnect() {	
+				$('#topics_list').innerHTML = "";
+				//topics = uniq(topics)
+				unique_topics = uniq(topics)
+				console.log("MQTT Connected");
+				console.log("Unique Topics: " + unique_topics)
+				console.log("Whole topics array: " + topics)
+				//topics_unique = unique(topics);
+				for (var i = 0; i < unique_topics.length; i++) {
+					var subOptions = {
+						qos: 2,
+						onFailure : onSubFail,
+					}
+					mqtt.subscribe(unique_topics[i], subOptions);
+					console.log(topics[i]);
+					$('#topics_list').prepend(topics[i] + "&#13;&#10;")
+				}
+			}
+			
+			function sendMessage(messageType) {
+				//MQTTconnect() //Make sure connection is established
+				if(messageType==1) { //From "Send MQTT Message panel"
+					messageText = $('#mqttMessageIn').val()
+					topic = $('#mqttTopicIn').val()
+				}
+				if(messageType==2) { //Control individual light
+					onOrOff = $('#indivOnOffIn').val()
+					hueVal = $('#hueIndivIn').val()
+					satVal = $('#satIndivIn').val()
+					briVal = $('#briIndivIn').val()
+					lightNum = $('#indivLightSelect').val()
+					messageText = '{ "Lights" : [{ "' + lightNum+ '" : [{"on" : "' + onOrOff + '", "hue" : "' + hueVal + 
+						'", "sat" : "' + satVal + '", "bri" : "' + briVal + '"}]}]}'
+					topic = "iol"
+				}
+				if(messageType==3) { //Control group of lights
+					onOrOff = $('#groupOnOffIn').val()
+					hueVal = $('#hueGroupIn').val()
+					satVal = $('#satGroupIn').val()
+					briVal = $('#briGroupIn').val()
+					groupNum = $('#groupLightSelect').val()
+					messageText = '{ "Groups" : [{ "' + groupNum+ '" : [{"on" : "' + onOrOff + '", "hue" : "' + hueVal + 
+						'", "sat" : "' + satVal + '", "bri" : "' + briVal + '"}]}]}'
+					topic = "iol"
+				}
+				
+				if(messageType==4) { //Send a light palette to the lower floor
+					h22 = $('#22h').val()
+					s22 = $('#22s').val()
+					b22 = $('#22b').val()
+					
+					h15 = $('#15h').val()
+					s15 = $('#15s').val()
+					b15 = $('#15b').val()
+					
+					h10 = $('#10h').val()
+					s10 = $('#10s').val()
+					b10 = $('#10b').val()
+					
+					h21 = $('#21h').val()
+					s21 = $('#21s').val()
+					b21 = $('#21b').val()
+					
+					h7 = $('#7h').val()
+					s7 = $('#7s').val()
+					b7 = $('#7b').val()
+					
+					h23 = $('#23h').val()
+					s23 = $('#23s').val()
+					b23 = $('#23b').val()
+					
+					h16 = $('#16h').val()
+					s16 = $('#16s').val()
+					b16 = $('#16b').val()
+					
+					h14 = $('#14h').val()
+					s14 = $('#14s').val()
+					b14 = $('#14b').val()
+					
+					h11 = $('#11h').val()
+					s11 = $('#11s').val()
+					b11 = $('#11b').val()
+
+					messageText = '{ "Lights" : [{ "22" : [{"on" : "true", "hue" : "' + h22 + 
+						'", "sat" : "' + s22 + '", "bri" : "' + b22 + '"}]},{ "15" : [{"on" : "true", "hue" : "' + h15 + '", "sat" : "' + s15 + '", "bri" : "' + b15 + '"}]},{ "10" : [{"on" : "true", "hue" : "' + h10 + '", "sat" : "' + s10 + '", "bri" : "' + b10 + '"}]},{ "21" : [{"on" : "true", "hue" : "' + h21 + '", "sat" : "' + s21 + '", "bri" : "' + b21 + '"}]},{ "7" : [{"on" : "true", "hue" : "' + h7 + '", "sat" : "' + s7 + '", "bri" : "' + b7 + '"}]},{ "23" : [{"on" : "true", "hue" : "' + h23 + '", "sat" : "' + s23 + '", "bri" : "' + b23 + '"}]},{ "16" : [{"on" : "true", "hue" : "' + h16 + '", "sat" : "' + s16 + '", "bri" : "' + b16 + '"}]},{ "14" : [{"on" : "true", "hue" : "' + h14 + '", "sat" : "' + s14 + '", "bri" : "' + b14 + '"}]},{ "11" : [{"on" : "true", "hue" : "' + h11 + '", "sat" : "' + s11 + '", "bri" : "' + b11 + '"}]}]}'
+					
+					
+					topic = "iol"
+				}
+				
+				if(messageType == 5) { //TODO: Send light palette to upper floor
+					
+				}
+				
+				if(messageType == 6) { //WIP: Send palette change notification to MQTT/hourglass
+					palette_name = $('#paletteNameIn').val()
+					messageText = '{ "Palette" : "' + palette_name + '"}'
+					topic = "iol"
+				}
+				
+				try {
+					message = new Paho.MQTT.Message(messageText); //How to make a message
+	
+				}
+				catch (err) {
+					console.log(err);
+				}
+				message.destinationName = topic; //Set destination of message
+				message.qos = 2;
+				//message.retained = true;
+//				setTimeout(function(){ //Wait 3 seconds to make sure connection is good before sending
+//					try {
+//  						//mqtt.send(topic, message, 2);
+//						mqtt.send(message);
+//						}
+//					catch(err) {
+//  						$('#mqttMessageIn').innerHTML = err.message;
+//						console.log(err);
+//					} //Send Message
+//				}, 1000					console.log(				} //Send Message
+				try {
+					mqtt.send(message);
+				}
+				catch(err) {
+					console.log(err);
+				} //Send Message
+				console.log("Message Sent: " + messageText + " to topic: " + topic);
+			}
+							
+			
+			function MQTTsubscribe() {
+				topic = $('#mqttSubscribeTopicIn').val()
+				topics.push(topic)				
+				console.log("Subscribed to MQTT topic: " + topic)
+				MQTTconnect();
+			}
+	 		
+			function MQTTconnect() {
+				
+				client_id = makeid(20)
+				//client_id = "test";
+				console.log("MQTT: Connecting to "+ host +" on port "+ port + ", client ID: " + client_id);
+				mqtt = new Paho.MQTT.Client(host,port,"/wss",client_id);
+				try{
+					mqtt.disconnect();
+				} catch(err) {
+					console.log(err)
+				}
+				var options = {
+					timeout: 3,
+					onSuccess: onConnect,
+					onFailure: onFailure,
+					useSSL: true,
+			 	};
+				mqtt.onConnectionLost = MQTTconnect;
+				mqtt.onMessageArrived = onMessageArrived;
+				mqtt.connect(options); //connect
+				//console.log(mqtt.clientId);
+			}
+			
+			function makeid(length) {
+   				var result           = '';
+   				var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+   				var charactersLength = characters.length;
+   				for ( var i = 0; i < length; i++ ) {
+					result += characters.charAt(Math.floor(Math.random() * charactersLength));
+				}
+			return result;
+			}
+			
+			function uniq(a) {
+    			var seen = {};
+    			return a.filter(function(item) {
+        			return seen.hasOwnProperty(item) ? false : (seen[item] = true);
+    			});
+			}
+			
+			function saveLowerPalette(){
+				h22 = $('#22h').val()
+				s22 = $('#22s').val()
+				b22 = $('#22b').val()
+
+				h15 = $('#15h').val()
+				s15 = $('#15s').val()
+				b15 = $('#15b').val()
+
+				h10 = $('#10h').val()
+				s10 = $('#10s').val()
+				b10 = $('#10b').val()
+
+				h21 = $('#21h').val()
+				s21 = $('#21s').val()
+				b21 = $('#21b').val()
+
+				h7 = $('#7h').val()
+				s7 = $('#7s').val()
+				b7 = $('#7b').val()
+
+				h23 = $('#23h').val()
+				s23 = $('#23s').val()
+				b23 = $('#23b').val()
+
+				h16 = $('#16h').val()
+				s16 = $('#16s').val()
+				b16 = $('#16b').val()
+
+				h14 = $('#14h').val()
+				s14 = $('#14s').val()
+				b14 = $('#14b').val()
+
+				h11 = $('#11h').val()
+				s11 = $('#11s').val()
+				b11 = $('#11b').val()
+				
+				name = $('#paletteName').val()
+				console.log("new pal name: " + name)
+				
+				request_url = "https://script.google.com/macros/s/AKfycbzYUe2N6TgZ4cmyrga_NEAJWkpXntFaQckJH1pBpE66s7HmCuM/exec"
+				
+				data_string = 'PaletteName=' + name + '&Area=Lower&Light 22 H=' + h22 + '&Light 22 S=' + s22 + '&Light 22 B=' + b22 + '&Light 15 H=' + h15 + '&Light 15 S=' + s15 + '&Light 15 B=' + b15 + '&Light 10 H=' + h10 + '&Light 10 S=' + s10 + '&Light 10 B=' + b10 + '&Light 21 H=' + h21 + '&Light 21 S=' + s21 + '&Light 21 B=' + b21 + '&Light 7 H=' + h7 + '&Light 7 S=' + s7 + '&Light 7 B=' + b7 + '&Light 23 H=' + h23 + '&Light 23 S=' + s23 + '&Light 23 B=' + b23 + '&Light 16 H=' + h16 + '&Light 16 S=' + s16 + '&Light 16 B=' + b16 + '&Light 14 H=' + h14 + '&Light 14 S=' + s14 + '&Light 14 B=' + b14 + '&Light 11 H=' + h11 + '&Light 11 S=' + s11 + '&Light 11 B=' + b11
+				
+				request = $.ajax({
+					//This Google Sheets macro URL was generated using https://script.google.com
+					//It runs on the Google sheet that can be found at https://docs.google.com/spreadsheets/d/1cbJ3FZkZ22og6977vUJ9ZQTMnoAr6RrDQxfctYfsg4U/
+					url: request_url,
+					type: "post",
+					data: data_string
+				});
+				// callback handler that will be called on succes
+				request.done(function (response, textStatus, jqXHR){
+					console.log("Hooray, it worked!");
+				});
+				// callback handler that will be called on failure
+				request.fail(function (jqXHR, textStatus, errorThrown){
+					// log the error to the console
+					console.error("The following error occured: "+ textStatus, errorThrown);
+					request = $.ajax({
+						url: request_url,
+						type: "post",
+						data: data_string
+					});
+				});
+			}		
+		</script>
+	</head>
+	<body>
+		<script>		
+			MQTTconnect();
+		</script>
+		<!-- Main Container -->
+		<div class="container"> 
+			
+			<header class="header">
+				<h4 class="logo">HCDE - Internet of Light DRG</h4>
+			</header>
+			 <!-- Hero Section -->
+			<section class="intro">
+				<div class="column">
+					<h3>Web Control Panel - Push and Store Light Palettes</h3>
+					<img src="sieg_light_map.jpg" alt="" style="width:80%;" class="profile">
+				</div>
+				<div class="column">
+					<p>This Github.io webpage is a way for us to play around with representing our work online and to test out an online control panel. </p>
+					<p>This page has MQTT Javascript functions implemented in it. It can subscribe to topics and update the webpage based on the messages. Sending MQTT messages takes a couple seconds. MQTT connection takes a second or two to establish, and must be re-established each time a message is sent for reliability. If we try to send a message before connection is established, it doesn't work. There could be a better way to do this.</p>
+					<p>It is important to use a unique (not something someone else might put) client name for MQTT to avoid being disconnected when someone else connects with that client name.</p>
+					<p>MQTT messages are currently send on the topic "iol". The file "hourglass.py" has been updated to receive and translate MQTT messages into Philips Hue lighting commands using the Python wrapper functions (changeLight and changeGroup).</p>
+				</div>
+			</section>
+			<div class="gallery">
+				
+				<div class="thumbnail"> <img src="https://hackaday.com/wp-content/uploads/2016/05/mqtt_dash.png" alt="" width="2000" class="cards"/>
+					<h4>MQTT Subscriber</h4>
+					<input id="mqttSubscribeTopicIn" style="width: 100px;" type="text" placeholder="MQTT Topic" />
+					<button  class="button" onclick="MQTTsubscribe();">Subscribe</button>
+					<p class="text_column">Use this tool to subscribe to new MQTT topics. When the page is refreshed, topics reset to default. Default topics are 'iol' and 'iol2.' Try sending a message to one of those topics! Topics: </p>
+					<textarea rows="5" cols="40" readonly="true" id="topics_list"> </textarea>
+				</div>
+				
+				<div class="thumbnail"> <img src="https://hackaday.com/wp-content/uploads/2016/05/mqtt_dash.png" alt="" width="2000" class="cards"/>
+					<h4>MQTT - Send a message!</h4>
+					<input id="mqttTopicIn" style="width: 100px;" type="text" placeholder="MQTT Topic" />
+					<input id="mqttMessageIn" style="width: 200px;" type="text" placeholder="MQTT Message" />
+					<button  class="button" onclick="sendMessage(1);">Send</button>
+					<p class="text_column">
+						Use this tool to send an MQTT message to any topic.
+					</p>
+				</div>
+				
+				<div class="thumbnail">
+					<textarea rows="20" cols="50" readonly="true" id="results"> </textarea>
+					<!--<div style="margin: 10px;" id="results"></div>-->
+					<h4>MQTT Monitor</h4>
+					<p> View incoming MQTT messages on topics that the webpage is subscribed to. 
+					By default, page is subscribed to the topics "iol" and "iol2". </p>
+					
+				</div>
+				
+				<div class="thumbnail"><img src="https://images-na.ssl-images-amazon.com/images/I/61HmVvjfBAL._SX425_.jpg" alt="" width="2000" class="cards"/>
+					<h4>Philips Hue Control - Group</h4>
+					<p>Select group number:</p>
+					<select id="groupLightSelect">
+						<option value="0">0 - All Lights</option>
+						<option value="1">1 - Lower Floor</option>
+						<option value="2">2 - Upper Floor</option>
+					</select>
+					<p>Group on or off:</p>
+					<select id="groupOnOffIn">
+						<option value="true">Group On</option>
+						<option value="false">Group Off</option>
+					</select>
+					<p>Enter HSB Values:</p>
+					<input id="hueGroupIn" style="width: 100px;" type="text" placeholder="Hue (0-65535)" />
+					<input id="satGroupIn" style="width: 100px;" type="text" placeholder="Sat (0-254)" />
+					<input id="briGroupIn" style="width: 100px;" type="text" placeholder="Bri (1-254)" />
+					<button class="button" onclick="sendMessage(3);">Send</button>
+					<p class="text_column">Send commands to groups of lights connected to the Sieg Master bridge.</p>
+				</div>
+				
+				<div class="thumbnail"> <a href="#"><img src="https://images-na.ssl-images-amazon.com/images/I/61HmVvjfBAL._SX425_.jpg" alt="" width="2000" class="cards"/></a>
+					<h4>Philips Hue Control - Individual</h4>
+					<p>Select light number:</p>
+					<select id="indivLightSelect">
+						<option value="22">22</option>
+						<option value="15">15</option>
+						<option value="10">10</option>
+						<option value="21">21</option>
+						<option value="7">7</option>
+						<option value="23">23</option>
+						<option value="16">16</option>
+						<option value="14">14</option>
+						<option value="11">11</option>
+						<option value="18">18</option>
+						<option value="20">20</option>
+						<option value="12">12</option>
+						<option value="25">25</option>
+						<option value="26">26</option>
+						<option value="5">5</option>
+						<option value="8">8</option>
+						<option value="19">19</option>
+						<option value="13">13</option>
+						<option value="24">24</option>
+						<option value="9">9</option>
+						<option value="17">17</option>
+					</select>
+					<p>Light on or off:</p>
+					<select id="indivOnOffIn">
+						<option value="true">Light On</option>
+						<option value="false">Light Off</option>
+					</select>
+					<p>Enter HSB Values:</p>
+					<input id="hueIndivIn" style="width: 100px;" type="text" placeholder="Hue (0-65535)" />
+					<input id="satIndivIn" style="width: 100px;" type="text" placeholder="Sat (0-254)" />
+					<input id="briIndivIn" style="width: 100px;" type="text" placeholder="Bri (1-254)" />
+					<button  class="button" onclick="sendMessage(2);">Send</button>
+					<p class="text_column">Send commands to individual lights connected to the Sieg Master bridge.</p>
+				</div>
+				
+				<div class="thumbnail_wide">
+					<h4>Lower Floor Palette Machine</h4>
+					<p> Create, save palettes for lower floor in Sieg. </p>
+					<form id="doof">
+					<div class="light_thumbnail">
+						22:
+						<input id="22h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+						<input id="22s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+						<input id="22b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+					</div>
+					<div class="light_thumbnail">
+						15:
+						<input id="15h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+						<input id="15s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+						<input id="15b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+					</div>
+					<div class="light_thumbnail">
+						10:
+						<input id="10h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+						<input id="10s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+						<input id="10b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+					</div>
+					<div class="light_thumbnail">
+						21:
+						<input id="21h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+						<input id="21s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+						<input id="21b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+					</div>
+					<div class="light_thumbnail">
+						7:
+						<input id="7h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+						<input id="7s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+						<input id="7b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+					</div>
+					<div class="light_thumbnail">
+						23:
+						<input id="23h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+						<input id="23s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+						<input id="23b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+					</div>
+					<div class="light_thumbnail">
+						16:
+						<input id="16h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+						<input id="16s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+						<input id="16b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+					</div>
+					<div class="light_thumbnail">
+						14:
+						<input id="14h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+						<input id="14s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+						<input id="14b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+					</div>
+					<div class="light_thumbnail">
+						11:
+						<input id="11h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+						<input id="11s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+						<input id="11b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+					</div>
+					</form>
+					<button class="button" onclick="sendMessage(4);">Push to Lights</button>
+					<input id="paletteName" style="width: 100px;" type="text" placeholder="Name" />
+					<button class="button" onclick="saveLowerPalette()">Save to Sheets</button>
+				</div>
+				
+				<div class="thumbnail"> <img src="https://hackaday.com/wp-content/uploads/2016/05/mqtt_dash.png" alt="" width="2000" class="cards"/>
+					<h4>Push Light Palettes!</h4>
+					<input id="paletteNameIn" style="width: 100px;" type="text" placeholder="Palette Name" />
+					<button  class="button" onclick="sendMessage(6);">Send</button>
+					<p class="text_column" style="word-wrap:break-word;">
+						Push light palettes from the Google Sheet (https://docs.google.com/spreadsheets/d/1cbJ3FZkZ22og6977vUJ9ZQTMnoAr6RrDQxfctYfsg4U). Reference palettes by their name in the sheet. Please don't add duplicate names.
+					</p>
+				</div>		
+			</div>
+		</div>
+	<!-- Main Container Ends -->
+	</body>
+</html>
