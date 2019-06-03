@@ -255,6 +255,7 @@
 				s11 = $('#11s').val()
 				b11 = $('#11b').val()
 				
+				palette_date_active = $('#paletteDate').val()
 				name = $('#paletteName').val()
 				console.log("new pal name: " + name)
 				
@@ -262,7 +263,7 @@
 				
 				request_url = "https://script.google.com/macros/s/AKfycbzlx6h3mO4oZeyNTLKPBIC2DIMiQb13rWnz9Bk8ga9RAboKuETy/exec"
 				
-				data_string = 'PaletteName=' + name + '&Area=Lower&Light 22 H=' + h22 + '&Light 22 S=' + s22 + '&Light 22 B=' + b22 + '&Light 15 H=' + h15 + '&Light 15 S=' + s15 + '&Light 15 B=' + b15 + '&Light 10 H=' + h10 + '&Light 10 S=' + s10 + '&Light 10 B=' + b10 + '&Light 21 H=' + h21 + '&Light 21 S=' + s21 + '&Light 21 B=' + b21 + '&Light 7 H=' + h7 + '&Light 7 S=' + s7 + '&Light 7 B=' + b7 + '&Light 23 H=' + h23 + '&Light 23 S=' + s23 + '&Light 23 B=' + b23 + '&Light 16 H=' + h16 + '&Light 16 S=' + s16 + '&Light 16 B=' + b16 + '&Light 14 H=' + h14 + '&Light 14 S=' + s14 + '&Light 14 B=' + b14 + '&Light 11 H=' + h11 + '&Light 11 S=' + s11 + '&Light 11 B=' + b11
+				data_string = 'PaletteName=' + name + '&Date_active=' + palette_date_active + '&Area=Lower&Light 22 H=' + h22 + '&Light 22 S=' + s22 + '&Light 22 B=' + b22 + '&Light 15 H=' + h15 + '&Light 15 S=' + s15 + '&Light 15 B=' + b15 + '&Light 10 H=' + h10 + '&Light 10 S=' + s10 + '&Light 10 B=' + b10 + '&Light 21 H=' + h21 + '&Light 21 S=' + s21 + '&Light 21 B=' + b21 + '&Light 7 H=' + h7 + '&Light 7 S=' + s7 + '&Light 7 B=' + b7 + '&Light 23 H=' + h23 + '&Light 23 S=' + s23 + '&Light 23 B=' + b23 + '&Light 16 H=' + h16 + '&Light 16 S=' + s16 + '&Light 16 B=' + b16 + '&Light 14 H=' + h14 + '&Light 14 S=' + s14 + '&Light 14 B=' + b14 + '&Light 11 H=' + h11 + '&Light 11 S=' + s11 + '&Light 11 B=' + b11
 				
 				request = $.ajax({
 					//This Google Sheets macro URL was generated using https://script.google.com
@@ -458,8 +459,12 @@
 						<input id="11b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
 					</div>
 					<button class="button" onclick="sendMessage(4);">Push to Lights</button>
+					
+					
 					<input id="paletteName" style="width: 100px;" type="text" placeholder="Name" />
+					<input id="paletteDate" style="width: 100px;" type="text" placeholder="Date to Display" />
 					<button class="button" onclick="saveLowerPalette()">Save to Sheets</button>
+					<p>Enter display date in format month/day/year - ex 6/3/2019</p>
 				</div>
 				
 				
