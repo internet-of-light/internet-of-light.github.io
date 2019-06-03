@@ -125,7 +125,7 @@ select {
 
 .thumbnail_wide {
 	width: 48%;
-	height: 550px;
+	height: 1200px;
 	text-align: center;
 	float: left;
 	margin-top: 35px;
@@ -180,6 +180,14 @@ select {
 	text-align: left;
 	padding-left: 20px;
 }
+
+.gallery .thumbnail_wide p {
+	margin: 0;
+	color: #000000;
+	text-align: left;
+	padding-left: 20px;
+}
+
 /* More info */
 .intro {
 	background-color: #FFFFFF;

@@ -10,7 +10,20 @@
   		<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
 		<!--<script data-cfasync="false" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
 		<script>
-			
+			$(document).ready(function () {
+  				$('.lightIconGroup').hide();
+  				$('#lowerLightsForPalette').show();
+				$('#paletteZoneSelect').change(function () {
+    				$('.lightIconGroup').hide();
+					val = $(this).val()
+					if(val=="upper" || val=="all") {
+						$('#upperLightsForPalette').show();
+					}
+					if(val=="lower" || val=="all") {
+						$('#lowerLightsForPalette').show();
+					}
+  				})
+			});
 			
 							 
 			
@@ -219,55 +232,125 @@
 			}
 			
 			function saveLowerPalette(){
-				h22 = $('#22h').val()
-				s22 = $('#22s').val()
-				b22 = $('#22b').val()
-
-				h15 = $('#15h').val()
-				s15 = $('#15s').val()
-				b15 = $('#15b').val()
-
-				h10 = $('#10h').val()
-				s10 = $('#10s').val()
-				b10 = $('#10b').val()
-
-				h21 = $('#21h').val()
-				s21 = $('#21s').val()
-				b21 = $('#21b').val()
-
-				h7 = $('#7h').val()
-				s7 = $('#7s').val()
-				b7 = $('#7b').val()
-
-				h23 = $('#23h').val()
-				s23 = $('#23s').val()
-				b23 = $('#23b').val()
-
-				h16 = $('#16h').val()
-				s16 = $('#16s').val()
-				b16 = $('#16b').val()
-
-				h14 = $('#14h').val()
-				s14 = $('#14s').val()
-				b14 = $('#14b').val()
-
-				h11 = $('#11h').val()
-				s11 = $('#11s').val()
-				b11 = $('#11b').val()
 				
+				palette_zone = $('#paletteZoneSelect').val()
 				palette_date_active = $('#paletteDate').val()
 				name = $('#paletteName').val()
+				if(name=="") {
+					console.error("Please enter a palette name")
+					return;
+				}
 				console.log("new pal name: " + name)
 				
-				//request_url = "https://script.google.com/macros/s/AKfycbzYUe2N6TgZ4cmyrga_NEAJWkpXntFaQckJH1pBpE66s7HmCuM/exec"
 				
-				request_url = "https://script.google.com/macros/s/AKfycbzlx6h3mO4oZeyNTLKPBIC2DIMiQb13rWnz9Bk8ga9RAboKuETy/exec"
+				if(palette_zone=="lower" || palette_zone=="all") {
+					h22 = $('#22h').val()
+					s22 = $('#22s').val()
+					b22 = $('#22b').val()
+
+					h15 = $('#15h').val()
+					s15 = $('#15s').val()
+					b15 = $('#15b').val()
+
+					h10 = $('#10h').val()
+					s10 = $('#10s').val()
+					b10 = $('#10b').val()
+
+					h21 = $('#21h').val()
+					s21 = $('#21s').val()
+					b21 = $('#21b').val()
+
+					h7 = $('#7h').val()
+					s7 = $('#7s').val()
+					b7 = $('#7b').val()
+
+					h23 = $('#23h').val()
+					s23 = $('#23s').val()
+					b23 = $('#23b').val()
+
+					h16 = $('#16h').val()
+					s16 = $('#16s').val()
+					b16 = $('#16b').val()
+
+					h14 = $('#14h').val()
+					s14 = $('#14s').val()
+					b14 = $('#14b').val()
+
+					h11 = $('#11h').val()
+					s11 = $('#11s').val()
+					b11 = $('#11b').val()
+				}
 				
-				data_string = 'PaletteName=' + name + '&Date_active=' + palette_date_active + '&Area=Lower&Light 22 H=' + h22 + '&Light 22 S=' + s22 + '&Light 22 B=' + b22 + '&Light 15 H=' + h15 + '&Light 15 S=' + s15 + '&Light 15 B=' + b15 + '&Light 10 H=' + h10 + '&Light 10 S=' + s10 + '&Light 10 B=' + b10 + '&Light 21 H=' + h21 + '&Light 21 S=' + s21 + '&Light 21 B=' + b21 + '&Light 7 H=' + h7 + '&Light 7 S=' + s7 + '&Light 7 B=' + b7 + '&Light 23 H=' + h23 + '&Light 23 S=' + s23 + '&Light 23 B=' + b23 + '&Light 16 H=' + h16 + '&Light 16 S=' + s16 + '&Light 16 B=' + b16 + '&Light 14 H=' + h14 + '&Light 14 S=' + s14 + '&Light 14 B=' + b14 + '&Light 11 H=' + h11 + '&Light 11 S=' + s11 + '&Light 11 B=' + b11
+				if(palette_zone=="upper" || palette_zone=="all") {
+					h18 = $('#18h').val()
+					s18 = $('#18s').val()
+					b18 = $('#18b').val()
+					
+					h20 = $('#20h').val()
+					s20 = $('#20s').val()
+					b20 = $('#20b').val()
+					
+					h12 = $('#12h').val()
+					s12 = $('#12s').val()
+					b12 = $('#12b').val()
+					
+					h25 = $('#25h').val()
+					s25 = $('#25s').val()
+					b25 = $('#25b').val()
+					
+					h26 = $('#26h').val()
+					s26 = $('#26s').val()
+					b26 = $('#26b').val()
+					
+					h5 = $('#5h').val()
+					s5 = $('#5s').val()
+					b5 = $('#5b').val()
+					
+					h8 = $('#8h').val()
+					s8 = $('#8s').val()
+					b8 = $('#8b').val()
+					
+					h19 = $('#19h').val()
+					s19 = $('#19s').val()
+					b19 = $('#19b').val()
+					
+					h13 = $('#13h').val()
+					s13 = $('#13s').val()
+					b13 = $('#13b').val()
+					
+					h24 = $('#24h').val()
+					s24 = $('#24s').val()
+					b24 = $('#24b').val()
+					
+					h9 = $('#9h').val()
+					s9 = $('#9s').val()
+					b9 = $('#9b').val()
+					
+					h17 = $('#17h').val()
+					s17 = $('#17s').val()
+					b17 = $('#17b').val()
+				}
+				
+				
+				//request_url = "https://script.google.com/macros/s/AKfycbzYUe2N6TgZ4cmyrga_NEAJWkpXntFaQckJH1pBpE66s7HmCuM/exec" //Sam's Sheet Macro
+				
+				request_url = "https://script.google.com/macros/s/AKfycbzlx6h3mO4oZeyNTLKPBIC2DIMiQb13rWnz9Bk8ga9RAboKuETy/exec" //Brock's Sheet Macro
+				
+//				data_string = 'PaletteName=' + name + '&Date Active=' + palette_date_active + '&Area=' + palette_zone + '&Light 22 H=' + h22 + '&Light 22 S=' + s22 + '&Light 22 B=' + b22 + '&Light 15 H=' + h15 + '&Light 15 S=' + s15 + '&Light 15 B=' + b15 + '&Light 10 H=' + h10 + '&Light 10 S=' + s10 + '&Light 10 B=' + b10 + '&Light 21 H=' + h21 + '&Light 21 S=' + s21 + '&Light 21 B=' + b21 + '&Light 7 H=' + h7 + '&Light 7 S=' + s7 + '&Light 7 B=' + b7 + '&Light 23 H=' + h23 + '&Light 23 S=' + s23 + '&Light 23 B=' + b23 + '&Light 16 H=' + h16 + '&Light 16 S=' + s16 + '&Light 16 B=' + b16 + '&Light 14 H=' + h14 + '&Light 14 S=' + s14 + '&Light 14 B=' + b14 + '&Light 11 H=' + h11 + '&Light 11 S=' + s11 + '&Light 11 B=' + b11
+				
+				data_string = 'PaletteName=' + name + '&Date Active=' + palette_date_active + '&Area=' + palette_zone
+				
+				if(palette_zone=="lower" || palette_zone=="all") {
+					data_string += '&Light 22 H=' + h22 + '&Light 22 S=' + s22 + '&Light 22 B=' + b22 + '&Light 15 H=' + h15 + '&Light 15 S=' + s15 + '&Light 15 B=' + b15 + '&Light 10 H=' + h10 + '&Light 10 S=' + s10 + '&Light 10 B=' + b10 + '&Light 21 H=' + h21 + '&Light 21 S=' + s21 + '&Light 21 B=' + b21 + '&Light 7 H=' + h7 + '&Light 7 S=' + s7 + '&Light 7 B=' + b7 + '&Light 23 H=' + h23 + '&Light 23 S=' + s23 + '&Light 23 B=' + b23 + '&Light 16 H=' + h16 + '&Light 16 S=' + s16 + '&Light 16 B=' + b16 + '&Light 14 H=' + h14 + '&Light 14 S=' + s14 + '&Light 14 B=' + b14 + '&Light 11 H=' + h11 + '&Light 11 S=' + s11 + '&Light 11 B=' + b11
+				}
+				
+				if(palette_zone=="upper" || palette_zone=="all") {
+					data_string += '&Light 18 H=' + h18 + '&Light 18 S=' + s18 + '&Light 18 B=' + b18 + '&Light 20 H=' + h20 + '&Light 20 S=' + s20 + '&Light 20 B=' + b20 + '&Light 12 H=' + h12 + '&Light 12 S=' + s12 + '&Light 12 B=' + b12 + '&Light 25 H=' + h25 + '&Light 25 S=' + s25 + '&Light 25 B=' + b25 + '&Light 26 H=' + h26 + '&Light 26 S=' + s26 + '&Light 26 B=' + b26 + '&Light 5 H=' + h5 + '&Light 5 S=' + s5 + '&Light 5 B=' + b5 + '&Light 8 H=' + h8 + '&Light 8 S=' + s8 + '&Light 8 B=' + b8 + '&Light 19 H=' + h19 + '&Light 19 S=' + s19 + '&Light 19 B=' + b19 + '&Light 13 H=' + h13 + '&Light 13 S=' + s13 + '&Light 13 B=' + b13 + '&Light 24 H=' + h24 + '&Light 24 S=' + s24 + '&Light 24 B=' + b24 + '&Light 9 H=' + h9 + '&Light 9 S=' + s9 + '&Light 9 B=' + b9 + '&Light 17 H=' + h17 + '&Light 17 S=' + s17 + '&Light 17 B=' + b17
+				}
 				
 				request = $.ajax({
 					//This Google Sheets macro URL was generated using https://script.google.com
-					//It runs on the Google sheet that can be found at https://docs.google.com/spreadsheets/d/1cbJ3FZkZ22og6977vUJ9ZQTMnoAr6RrDQxfctYfsg4U/
+					//It runs on the Google sheet that can be found at https://docs.google.com/spreadsheets/d/1_4NSRRKvsQFGIs9Vul9h3z2Etum66DvXhizQpLpzQVw
 					url: request_url,
 					type: "post",
 					data: data_string
@@ -403,68 +486,151 @@
 				
 				<div class="thumbnail_wide">
 					<h4>Lower Floor Palette Machine</h4>
-					<p> Create, save palettes for lower floor in Sieg. </p>
-					<div class="light_thumbnail">
-						22:
-						<input id="22h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
-						<input id="22s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
-						<input id="22b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
-					</div>
-					<div class="light_thumbnail">
-						15:
-						<input id="15h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
-						<input id="15s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
-						<input id="15b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
-					</div>
-					<div class="light_thumbnail">
-						10:
-						<input id="10h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
-						<input id="10s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
-						<input id="10b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
-					</div>
-					<div class="light_thumbnail">
-						21:
-						<input id="21h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
-						<input id="21s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
-						<input id="21b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
-					</div>
-					<div class="light_thumbnail">
-						7:
-						<input id="7h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
-						<input id="7s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
-						<input id="7b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
-					</div>
-					<div class="light_thumbnail">
-						23:
-						<input id="23h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
-						<input id="23s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
-						<input id="23b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
-					</div>
-					<div class="light_thumbnail">
-						16:
-						<input id="16h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
-						<input id="16s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
-						<input id="16b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
-					</div>
-					<div class="light_thumbnail">
-						14:
-						<input id="14h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
-						<input id="14s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
-						<input id="14b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
-					</div>
-					<div class="light_thumbnail">
-						11:
-						<input id="11h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
-						<input id="11s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
-						<input id="11b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
-					</div>
+					<label for="paletteZoneSelect"> Palette Zone </label>
+					<select id="paletteZoneSelect">
+						<option selected value="lower">Lower Floor</option>
+						<option value="upper">Upper Floor</option>	
+						<option value="all">All Lights</option>
+					</select>
+					<p> Create, save palettes for lower floor in Sieg. You can test out a palette by clicking "Push to Lights" or save it to the linked Google Sheet using "Save to Sheets." For saving palettes, enter display date in format month/day/year - ex 6/3/2019. Make sure to select the correct area and fill in all the relevant values. If you only want the palette for the upper floor, make sure to select "upper floor" in the "Zone" dropdown. Look at the Sheet before you add a new palette - please don't add duplicate names. I haven't dealt with this yet - might need a new Google macro.</p>
 					<button class="button" onclick="sendMessage(4);">Push to Lights</button>
-					
-					
 					<input id="paletteName" style="width: 100px;" type="text" placeholder="Name" />
 					<input id="paletteDate" style="width: 100px;" type="text" placeholder="Date to Display" />
 					<button class="button" onclick="saveLowerPalette()">Save to Sheets</button>
-					<p>Enter display date in format month/day/year - ex 6/3/2019</p>
+					<div id="lowerLightsForPalette" class="lightIconGroup"> 
+						<p style="text-align: center">Lower Floor Lights</p>
+						<div class="light_thumbnail">
+							22:
+							<input id="22h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+							<input id="22s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+							<input id="22b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+						</div>
+						<div class="light_thumbnail">
+							15:
+							<input id="15h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+							<input id="15s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+							<input id="15b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+						</div>
+						<div class="light_thumbnail">
+							10:
+							<input id="10h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+							<input id="10s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+							<input id="10b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+						</div>
+						<div class="light_thumbnail">
+							21:
+							<input id="21h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+							<input id="21s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+							<input id="21b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+						</div>
+						<div class="light_thumbnail">
+							7:
+							<input id="7h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+							<input id="7s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+							<input id="7b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+						</div>
+						<div class="light_thumbnail">
+							23:
+							<input id="23h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+							<input id="23s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+							<input id="23b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+						</div>
+						<div class="light_thumbnail">
+							16:
+							<input id="16h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+							<input id="16s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+							<input id="16b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+						</div>
+						<div class="light_thumbnail">
+							14:
+							<input id="14h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+							<input id="14s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+							<input id="14b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+						</div>
+						<div class="light_thumbnail">
+							11:
+							<input id="11h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+							<input id="11s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+							<input id="11b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+						</div>
+					</div>
+					
+					<div id="upperLightsForPalette" class="lightIconGroup"> 
+						<p style="text-align: center">Upper Floor Lights</p>
+						<div class="light_thumbnail">
+							18:
+							<input id="18h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+							<input id="18s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+							<input id="18b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+						</div>
+						<div class="light_thumbnail">
+							20:
+							<input id="20h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+							<input id="20s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+							<input id="20b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+						</div>
+						<div class="light_thumbnail">
+							12:
+							<input id="12h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+							<input id="12s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+							<input id="12b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+						</div>
+						<div class="light_thumbnail">
+							25:
+							<input id="25h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+							<input id="25s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+							<input id="25b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+						</div>
+						<div class="light_thumbnail">
+							26:
+							<input id="26h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+							<input id="26s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+							<input id="26b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+						</div>
+						<div class="light_thumbnail">
+							5:
+							<input id="5h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+							<input id="5s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+							<input id="5b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+						</div>
+						<div class="light_thumbnail">
+							8:
+							<input id="8h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+							<input id="8s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+							<input id="8b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+						</div>
+						<div class="light_thumbnail">
+							19:
+							<input id="19h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+							<input id="19s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+							<input id="19b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+						</div>
+						<div class="light_thumbnail">
+							13:
+							<input id="13h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+							<input id="13s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+							<input id="13b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+						</div>
+						<div class="light_thumbnail">
+							24:
+							<input id="24h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+							<input id="24s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+							<input id="24b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+						</div>
+						<div class="light_thumbnail">
+							9:
+							<input id="9h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+							<input id="9s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+							<input id="9b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+						</div>
+						<div class="light_thumbnail">
+							17:
+							<input id="17h" class="paletteGridSectionTextEntry" type="text" placeholder="Hue (0-65535)" />
+							<input id="17s" class="paletteGridSectionTextEntry" type="text" placeholder="Sat (0-254)" />
+							<input id="17b" class="paletteGridSectionTextEntry" type="text" placeholder="Bri (1-254)" />
+						</div>
+					</div>
+					
 				</div>
 				
 				
@@ -473,7 +639,7 @@
 					<input id="paletteNameIn" style="width: 100px;" type="text" placeholder="Palette Name" />
 					<button  class="button" onclick="sendMessage(6);">Send</button>
 					<p class="text_column" style="word-wrap:break-word;">
-						Push light palettes from the Google Sheet (TODO: ADD SHEET URL FROM BROCK). Reference palettes by their name in the sheet. Please don't add duplicate names.
+						Push light palettes from the Google Sheet (https://docs.google.com/spreadsheets/d/1_4NSRRKvsQFGIs9Vul9h3z2Etum66DvXhizQpLpzQVw). Reference palettes by their name in the sheet. Please don't add duplicate names.
 					</p>
 				</div>		
 			</div>
